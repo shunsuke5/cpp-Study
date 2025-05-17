@@ -1,9 +1,15 @@
+#include "Test.hpp"
 #include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+#include <cmath>
+#include <new>
 using namespace std;
 
 int main() {
-	cout << 2 << '+' << 3 << '=' << 2 + 3 << endl;
-	cout << "π =" << 3.14159 << "..." << endl;
+	Test test;
+	test.Func();
 
 	return 0;
 }
