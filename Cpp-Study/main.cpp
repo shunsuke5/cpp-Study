@@ -16,7 +16,7 @@ void Show(IntArray array) {
 
 int main() {
 	IntArray array0to9(10);
-	
+
 	for (int i = 0; i < array0to9.Size(); i++) {
 		array0to9.Set(i, i);
 	}
