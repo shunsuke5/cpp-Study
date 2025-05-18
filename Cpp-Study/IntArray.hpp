@@ -5,6 +5,7 @@ public:
     IntArray(int size);
     IntArray(const IntArray& other);
     ~IntArray();
+    void operator=(const IntArray& other);
 
 public:
     int Get(int i);
