@@ -26,6 +26,15 @@ IntArray::~IntArray() {
     cout << "デストラクタ" << endl;
 }
 
+void IntArray::operator=(const IntArray& other) {
+    int* array = new int[other.m_size];
+
+    delete[] m_array;
+    m_array = array;
+    m_size = other.m_size;
+    copy(other.m_array, other.m_array + m_size, m_array);
+}
+
 int IntArray::Get(int i) {
     CheckIndex(i);
     return m_array[i];
