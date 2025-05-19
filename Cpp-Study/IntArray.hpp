@@ -8,12 +8,12 @@ public:
     void operator=(const IntArray& other);
 
 public:
-    int Get(int i);
+    int Get(int i) const;
     void Set(int i, int value);
-    int Size();
+    int Size() const;
 
 private:
-    void CheckIndex(int i);
+    void CheckIndex(int i) const;
 
 private:
     int* m_array;
