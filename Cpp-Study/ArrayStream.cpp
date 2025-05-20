@@ -5,13 +5,7 @@ ArrayStream::ArrayStream(const double* array) {
     m_i = 0;
 }
 
-
-bool ArrayStream::Set() {
+void ArrayStream::SetBase() {
     m_n = m_array[m_i];
-    if (m_n >= 0) {
-        ++m_i;
-        return true;
-    } else {
-        return false;
-    }
+    ++m_i;
 }
