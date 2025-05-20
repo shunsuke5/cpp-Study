@@ -3,10 +3,13 @@
 
 class ArrayStream : public Stream {
 public:
-    ArrayStream(const double* array);
+    ArrayStream(const double* array, int size);
+    ~ArrayStream();
+
+protected:
     void SetBase();
 
 private:
-    const double* m_array;
+    double* m_array;
     int m_i;
 };

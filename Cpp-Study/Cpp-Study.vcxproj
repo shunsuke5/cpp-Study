@@ -127,15 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ArrayStream.cpp" />
-    <ClCompile Include="InputStream.cpp" />
+    <ClCompile Include="DumpFile.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Stream.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ArrayStream.hpp" />
-    <ClInclude Include="InputStream.hpp" />
-    <ClInclude Include="Stream.hpp" />
+    <ClInclude Include="DumpFile.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
