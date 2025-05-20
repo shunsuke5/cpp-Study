@@ -3,5 +3,5 @@
 
 class InputStream : public Stream {
 public:
-    bool Set();
+    void SetBase();
 };

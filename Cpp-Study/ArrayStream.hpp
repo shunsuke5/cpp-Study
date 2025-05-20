@@ -4,7 +4,7 @@
 class ArrayStream : public Stream {
 public:
     ArrayStream(const double* array);
-    bool Set();
+    void SetBase();
 
 private:
     const double* m_array;
