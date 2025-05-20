@@ -2,6 +2,12 @@
 #include <iostream>
 using namespace std;
 
+Stream::Stream() : m_n(-1) {}
+
+Stream::Stream(double n) : m_n(n) {}
+
+Stream::~Stream() {}
+
 double Stream::Get() const {
     return m_n;
 }
@@ -9,9 +15,4 @@ double Stream::Get() const {
 bool Stream::Set() {
     SetBase();
     return m_n >= 0;
-}
-
-void Stream::SetBase() {
-    cout << "Stream::SetBase" << endl;
-    m_n = -1;
 }
