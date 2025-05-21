@@ -7,9 +7,9 @@
 using namespace std;
 
 int main() {
-    DumpFile dump;
+    DumpFile d;
 
-    if (!dump.Run()) {
+    if (d.Run()) {
         return EXIT_FAILURE;
     }
 }
