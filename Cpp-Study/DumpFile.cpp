@@ -3,6 +3,7 @@
 #include <fstream>
 #include <cstdio>
 #include <string>
+#include <iomanip>
 using namespace std;
 
 const int PAGE_WIDTH = 16;
@@ -50,10 +51,18 @@ void DumpFile::Dump() {
 
         m_file.read((char*)buf, sizeof buf);
 
+        ios::fmtflags flags = cout.flags();
+        char fill = cout.fill();
+
+        cout << setfill('0') << hex << uppercase;
+
         for (int w = 0, size = m_file.gcount(); w < size; w++) {
             printf("%02X ", buf[w]);
+            cout << setw(2) << (int)buf[w] << ' ';
         }
         cout << endl;
+
+        cout << setiosflags(flags) << setfill(fill);
     }
 }
 
