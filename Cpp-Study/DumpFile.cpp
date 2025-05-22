@@ -57,7 +57,6 @@ void DumpFile::Dump() {
         cout << setfill('0') << hex << uppercase;
 
         for (int w = 0, size = m_file.gcount(); w < size; w++) {
-            printf("%02X ", buf[w]);
             cout << setw(2) << (int)buf[w] << ' ';
         }
         cout << endl;
