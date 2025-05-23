@@ -4,24 +4,31 @@
 #include <cstdlib>
 #include <string>
 #include <cstdio>
+#include <vector>
 using namespace std;
 
 int main() {
-    Array<int> iarray(5);
-    Array<double> darray(5);
-    Array<string> sarray(5);
+    const char* error = NULL;
+    ifstream file;
+    string line;
 
-    for (int i = 0, size = iarray.Size(); i < size; i++) {
-        iarray.Set(i, i * 2);
-        darray.Set(i, i * 5.5);
-        sarray.Set(i, "亀井俊輔");
+    file.open("test.txt");
+    if (!file.is_open()) {
+        error = "ファイルを開けませんでした";
+        goto ON_ERROR;
     }
 
-    for (int i = 0, size = iarray.Size(); i < size; i++) {
-        cout << iarray.Get(i) << ' ';
-        cout << darray.Get(i) << ' ';
-        cout << sarray.Get(i) << ' ';
-        cout << endl;
+    getline(file, line);
+    if (file.fail()) {
+        cerr << "ファイルを読み込めませんでした" << endl;
+        return EXIT_FAILURE;
     }
-    cout << endl;
+
+    cout << line << endl;
+
+ON_ERROR:
+    if (error != NULL) {
+        cerr << error << endl;
+        return EXIT_FAILURE;
+    }
 }
