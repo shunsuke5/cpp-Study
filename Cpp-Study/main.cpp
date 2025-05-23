@@ -1,34 +1,37 @@
 #include "Array.hpp"
 #include <fstream>
 #include <iostream>
+#include "FileException.hpp"
 #include <cstdlib>
 #include <string>
 #include <cstdio>
 #include <vector>
 using namespace std;
 
-int main() {
-    const char* error = NULL;
-    ifstream file;
-    string line;
-
-    file.open("test.txt");
+void Open(ifstream& file, const char* filename) {
+    file.open(filename);
     if (!file.is_open()) {
-        error = "ファイルを開けませんでした";
-        goto ON_ERROR;
+        throw OpenFileException(filename);
     }
+}
 
+void GetLine(ifstream& file, string& line) {
     getline(file, line);
     if (file.fail()) {
-        cerr << "ファイルを読み込めませんでした" << endl;
-        return EXIT_FAILURE;
+        throw ReadFileException();
     }
+}
 
-    cout << line << endl;
+int main() {
+    try {
+        ifstream file;
+        Open(file, "test.txt");
 
-ON_ERROR:
-    if (error != NULL) {
-        cerr << error << endl;
+        string line;
+        GetLine(file, line);
+        cout << line << endl;
+    } catch (const FileException& e) {
+        cerr << e.What() << endl;
         return EXIT_FAILURE;
     }
 }
