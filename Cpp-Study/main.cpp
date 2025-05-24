@@ -1,37 +1,27 @@
-#include "Array.hpp"
+#include "Integer.hpp"
+#include "a.hpp"
 #include <fstream>
 #include <iostream>
-#include "FileException.hpp"
 #include <cstdlib>
 #include <string>
 #include <cstdio>
 #include <vector>
 using namespace std;
 
-void Open(ifstream& file, const char* filename) {
-    file.open(filename);
-    if (!file.is_open()) {
-        throw OpenFileException(filename);
-    }
-}
-
-void GetLine(ifstream& file, string& line) {
-    getline(file, line);
-    if (file.fail()) {
-        throw ReadFileException();
-    }
-}
-
 int main() {
-    try {
-        ifstream file;
-        Open(file, "test.txt");
+    Integer a(100), b(300);
+    a.Show();   // 300
+    b.Show();   // 300
 
-        string line;
-        GetLine(file, line);
-        cout << line << endl;
-    } catch (const FileException& e) {
-        cerr << e.What() << endl;
-        return EXIT_FAILURE;
-    }
+    A aaa(500);
+    aaa.Show(); // 500
+    a.Show();   // 500
+
+    A bbb(700);
+    bbb.Show(); // 700
+    aaa.Show(); // 700
+    a.Show();   // 700
+
+    aaa.Print();    // 10 10
+    bbb.Print();    // 10 10
 }

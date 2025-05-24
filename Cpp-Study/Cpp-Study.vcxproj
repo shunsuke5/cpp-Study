@@ -131,13 +131,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Exception.cpp" />
-    <ClCompile Include="Exception.hpp" />
-    <ClCompile Include="FileException.cpp" />
+    <ClCompile Include="a.cpp" />
+    <ClCompile Include="Integer.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FileException.hpp" />
+    <ClInclude Include="a.hpp" />
+    <ClInclude Include="IntArray.hpp" />
+    <ClInclude Include="Integer.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
