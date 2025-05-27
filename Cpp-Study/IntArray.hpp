@@ -2,10 +2,12 @@
 
 class IntArray {
 public:
-    IntArray(int size);
+    explicit IntArray(int size);
     IntArray(const IntArray& other);
     ~IntArray();
     void operator=(const IntArray& other);
+    int& operator[](int i);
+    const int& operator[](int i) const;
 
 public:
     int Get(int i) const;

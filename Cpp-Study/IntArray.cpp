@@ -49,6 +49,16 @@ int IntArray::Size() const {
     return m_size;
 }
 
+int& IntArray::operator[](int i) {
+    CheckIndex(i);
+    return m_array[i];
+}
+
+const int& IntArray::operator[](int i) const {
+    CheckIndex(i);
+    return m_array[i];
+}
+
 void IntArray::CheckIndex(int i) const {
     if (i < 0 || i >= m_size) {
         cout << "不正なインデックス" << endl;
