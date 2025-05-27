@@ -8,50 +8,32 @@
 #include <vector>
 using namespace std;
 
-void Show(const IntArray& array) {
-    cout << array.Size() << endl;
+void Hoge(int* cp) {
+    int* p = (int*)cp;
 }
 
 int main() {
-    //Show(5);  // explicitによりコンパイルエラー
+    // static_cast
+    signed char a = -1;
+    int b;
 
-    Fraction f1(5, 7);
-    Fraction f2(3, 4);
-    double n = 2;
+    b = a;
+    printf("%08X (%d)\n", b, b);
 
-    cout << f1 << endl;     // 5 / 7
+    b = static_cast<unsigned char>(a);
+    printf("%08X (%d)\n", b, b);
 
-    /* operator-() const */
-    cout << -f2 << endl;    // -3 / 4
+    // reinterpret_cast
+    int n = 0x12345678;
+    const char* p = reinterpret_cast<const char*>(&n);
 
-    /* operator double() const */
-    double d = f1;
-    cout << d << endl;      // 0.714286
+    for (size_t i = 0; i < sizeof n; ++i) {
+        printf("%02X", p[i]);
+    }
+    printf("<-> %08X\n", n);
 
-    /* 暗黙のキャスト fd = Fraction(d) */
-    Fraction fd = d;
-    cout << fd << endl;     // 0.714286/1
-
-    /* メンバ関数の operator*() */
-    // 参考書にはメンバ関数、非メンバ関数の両方が定義されている場合
-    // メンバ関数の方が優先されると記述があるが、
-    // 「演算子 * があいまい」とエラーが出てしまうのはなぜ？
-    Fraction f3 = f1 * f2;
-    cout << f3 << endl;     // 15 / 28
-
-    /* operator*=() */
-    f1 *= f2;
-    cout << f1 << endl;     // 15 / 28
-
-    /* operator++(), oprator++(int) */
-    cout << ++f3 << endl;   // 43 / 28
-    cout << f3++ << endl;   // 43 / 28
-    cout << f3 << endl;     // 71 / 28
-
-    Fraction fff(1,1);
-    cout << fff << endl;    // 1 / 1
-
-    /* 非メンバ関数の operator*() */
-    fff = n * f1;
-    cout << fff << endl;    // 30 / 28
+    // const_cast
+    const int n2 = 1;
+    const int* p2 = &n2;
+    Hoge(const_cast<int*>(p2));
 }
