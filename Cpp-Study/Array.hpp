@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
+#include <stdexcept>
 
 template <typename TYPE>
 class Array {
@@ -10,6 +11,7 @@ public:
     Array(const Array& other);
     void operator=(const Array& other);
     virtual ~Array();
+    void Error();
 
 public:
     TYPE Get(int i) const;
@@ -23,7 +25,7 @@ private:
 
 private:
     TYPE* m_array;
-    int m_size;
+    const int m_size;
 };
 
 /*
@@ -31,30 +33,33 @@ private:
 */
 
 template <typename TYPE>
-Array<TYPE>::Array(int size) {
+Array<TYPE>::Array(int size) : m_size(size) {
     m_array = new TYPE[size];
-    m_size = size;
 }
 
 template <typename TYPE>
-Array<TYPE>::Array(const Array& other) {
-    m_size = other.m_size;
+Array<TYPE>::Array(const Array& other) : m_size(other.m_size) {
     m_array = new TYPE[m_size];
     std::copy(other.m_array, other.m_array + m_size, m_array);
 }
 
 template <typename TYPE>
 void Array<TYPE>::operator=(const Array& other) {
-    TYPE* array = new TYPE[other.m_size];
-    delete[] m_array;
-    m_array = array;
-    m_size = other.m_size;
+    if (m_size != other.m_size) {
+        throw std::length_error("長さが違います");
+    }
+
     std::copy(other.m_array, other.m_array + m_size, m_array);
 }
 
 template <typename TYPE>
 Array<TYPE>::~Array() {
     delete[] m_array;
+}
+
+template <typename TYPE>
+void Array<TYPE>::Error() {
+    m_size = 0;
 }
 
 template <typename TYPE>

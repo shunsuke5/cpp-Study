@@ -131,14 +131,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="a.cpp" />
-    <ClCompile Include="Integer.cpp" />
+    <ClCompile Include="Fraction.cpp" />
+    <ClCompile Include="IntArray.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="a.hpp" />
+    <ClInclude Include="Fraction.hpp" />
     <ClInclude Include="IntArray.hpp" />
-    <ClInclude Include="Integer.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
