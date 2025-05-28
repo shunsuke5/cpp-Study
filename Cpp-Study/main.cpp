@@ -8,32 +8,35 @@
 #include <vector>
 using namespace std;
 
-void Hoge(int* cp) {
-    int* p = (int*)cp;
+int Bit(int x) {
+    return 1 << x;
+}
+
+const int SHOW_X = Bit(0);
+const int SHOW_Y = Bit(1);
+const int SHOW_Z = Bit(2);
+
+void Show(int flags) {
+    cout << ((flags & SHOW_X) != 0 ? 'X' : 'x')
+        << ((flags & SHOW_Y) != 0 ? 'Y' : 'y')
+        << ((flags & SHOW_Z) != 0 ? 'Z' : 'z')
+        << endl;
 }
 
 int main() {
-    // static_cast
-    signed char a = -1;
-    int b;
+    Show(0);                        // xyz
+    Show(SHOW_Y);                   // xYz
+    Show(SHOW_X | SHOW_Z);          // XyZ
+    Show(SHOW_X | SHOW_Y | SHOW_Z); // XYZ
 
-    b = a;
-    printf("%08X (%d)\n", b, b);
+    int flags = 0;
+    // ビットフラグ追加
+    cout << (flags |= (SHOW_X | SHOW_Y)) << endl;   // 3
 
-    b = static_cast<unsigned char>(a);
-    printf("%08X (%d)\n", b, b);
+    // ビットフラグ削除
+    cout << (flags &= ~(SHOW_X | SHOW_Y)) << endl;  // 0
 
-    // reinterpret_cast
-    int n = 0x12345678;
-    const char* p = reinterpret_cast<const char*>(&n);
-
-    for (size_t i = 0; i < sizeof n; ++i) {
-        printf("%02X", p[i]);
-    }
-    printf("<-> %08X\n", n);
-
-    // const_cast
-    const int n2 = 1;
-    const int* p2 = &n2;
-    Hoge(const_cast<int*>(p2));
+    // ビットフラグ反転
+    cout << (flags ^= (SHOW_X | SHOW_Y)) << endl;   // 3
+    cout << (flags ^= (SHOW_X | SHOW_Y)) << endl;   // 0
 }
