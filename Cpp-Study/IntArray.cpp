@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
+#include <cassert>
 
 using namespace std;
 
@@ -60,8 +61,5 @@ const int& IntArray::operator[](int i) const {
 }
 
 void IntArray::CheckIndex(int i) const {
-    if (i < 0 || i >= m_size) {
-        cout << "不正なインデックス" << endl;
-        exit(EXIT_FAILURE);
-    }
+    assert(i >= 0 && i < m_size);
 }
