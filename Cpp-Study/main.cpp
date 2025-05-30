@@ -1,4 +1,4 @@
-#include "IntArray.hpp"
+#include "ValueFactory.hpp"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -10,26 +10,20 @@
 #include <typeinfo>
 using namespace std;
 
-string Hoge(ostream& ostr) {
-    ostringstream* sstr = dynamic_cast<ostringstream*>(&ostr);
-    if (sstr != NULL) {
-        sstr->str("");
-        *sstr << "Hoge" << flush;
-        return sstr->str();
-    } else {
-        return "Error";
-    }
-}
+#define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 
 int main() {
-    ostringstream sstr;
-    cout << Hoge(sstr) << endl;
-    cout << Hoge(cout) << endl;
+    static const int VALUE[] = {
+        1,2,4,8,
+    };
+    static const int SIZE = ARRAY_SIZE(VALUE);
 
-    /*
-    * クロスキャスト
-    */
-    fstream fstr;
-    istream& istr = fstr;
-    ostream& ostr = dynamic_cast<ostream&>(istr);
+    ValueFactory factory;
+
+    for (int i = 0; i < SIZE; ++i) {
+        Value* value = factory.New(VALUE[i]);
+        cout << value->Get() << ' ';
+        delete value;
+    }
+    cout << endl;
 }
