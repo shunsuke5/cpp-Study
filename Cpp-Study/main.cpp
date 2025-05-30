@@ -7,75 +7,32 @@
 #include <cstdio>
 #include <vector>
 #include <chrono>
-#define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
+#include <typeinfo>
 using namespace std;
 
-class IObject {
-public:
-    virtual ~IObject() {}
-    virtual string GetString() const = 0;
-};
+void CheckType(const ostream& ostr) {
+    const type_info& tiOstr = typeid(ostr);
+    const type_info& tiOstream = typeid(ostream);
+    const type_info& tiOfstream = typeid(ofstream);
+    const type_info& tiCOfstream = typeid(const ofstream);
+    const type_info& tiCROfstream = typeid(const ofstream&);
 
-class IInt : virtual public IObject {
-public:
-    virtual int GetInt() const = 0;
-};
+    cout << boolalpha;
 
-class IDouble : virtual public IObject {
-public:
-    virtual double GetDouble() const = 0;
-};
-
-class Double : virtual public IInt, virtual public IDouble {
-public:
-    Double(double x) : m_x(x) {}
-
-public:
-    virtual string GetString() const {
-        ostringstream ostr;
-        ostr << "Double(" << m_x << ')';
-        return ostr.str();
-    }
-
-    int GetInt() const {
-        return static_cast<int>(m_x);
-    }
-
-    double GetDouble() const {
-        return m_x;
-    }
-
-private:
-    const double m_x;
-};
-
-ostream& operator<<(ostream& ostr, const IObject& obj) {
-    return ostr << obj.GetString();
-}
-
-void ShowInt(const IInt& obj) {
-    cout << "int: " << obj.GetInt() << endl;
-}
-
-void ShowDouble(const IDouble& obj) {
-    cout << "double: " << obj.GetDouble() << endl;
+    cout << "(==)" << endl
+        << "ostream :" << (tiOstr == tiOstream) << endl
+        << "ofstream :" << (tiOstr == tiOfstream) << endl
+        << "const ofstream :" << (tiOstr == tiCOfstream) << endl
+        << "ostream :" << (tiOstr == tiCROfstream) << endl;
+    
+    cout << "(!=)" << endl
+        << "ostream :" << (tiOstr != tiOstream) << endl
+        << "ofstream :" << (tiOstr != tiOfstream) << endl
+        << "const ofstream :" << (tiOstr != tiCOfstream) << endl
+        << "ostream :" << (tiOstr != tiCROfstream) << endl;
 }
 
 int main() {
-    Double n = 1.2;
-    IInt& i = n;
-    IDouble& d = n;
-    IObject& o = n;
-
-    cout << n << endl;
-    ShowInt(n);
-    ShowDouble(n);
-    
-    cout << i << endl;
-    ShowInt(i);
-    
-    cout << d << endl;
-    ShowDouble(d);
-    
-    cout << o << endl;
+    ofstream ofstr;
+    CheckType(ofstr);
 }
