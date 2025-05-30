@@ -1,6 +1,7 @@
 #include "IntArray.hpp"
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <cstdlib>
 #include <string>
 #include <cstdio>
@@ -9,41 +10,72 @@
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 using namespace std;
 
-class ABase {
+class IObject {
 public:
-    ABase(int x) : m_x(x) {}
-    virtual ~ABase() {}
+    virtual ~IObject() {}
+    virtual string GetString() const = 0;
+};
+
+class IInt : virtual public IObject {
+public:
+    virtual int GetInt() const = 0;
+};
+
+class IDouble : virtual public IObject {
+public:
+    virtual double GetDouble() const = 0;
+};
+
+class Double : virtual public IInt, virtual public IDouble {
+public:
+    Double(double x) : m_x(x) {}
 
 public:
-    void Show() {
-        cout << m_x << endl;
+    virtual string GetString() const {
+        ostringstream ostr;
+        ostr << "Double(" << m_x << ')';
+        return ostr.str();
+    }
+
+    int GetInt() const {
+        return static_cast<int>(m_x);
+    }
+
+    double GetDouble() const {
+        return m_x;
     }
 
 private:
-    int m_x;
+    const double m_x;
 };
 
-class A1 : virtual public ABase {
-public:
-    A1() : ABase(1) {}
-};
+ostream& operator<<(ostream& ostr, const IObject& obj) {
+    return ostr << obj.GetString();
+}
 
-class A2 : virtual public ABase {
-public:
-    A2() : ABase(2) {}
-};
+void ShowInt(const IInt& obj) {
+    cout << "int: " << obj.GetInt() << endl;
+}
 
-class C : public A1, public A2 {
-public:
-    C() : ABase(3) {}
-};
+void ShowDouble(const IDouble& obj) {
+    cout << "double: " << obj.GetDouble() << endl;
+}
 
 int main() {
-    A1 a1;
-    A2 a2;
-    C c;
+    Double n = 1.2;
+    IInt& i = n;
+    IDouble& d = n;
+    IObject& o = n;
 
-    a1.Show();  // 1
-    a2.Show();  // 2
-    c.Show();   // 3
+    cout << n << endl;
+    ShowInt(n);
+    ShowDouble(n);
+    
+    cout << i << endl;
+    ShowInt(i);
+    
+    cout << d << endl;
+    ShowDouble(d);
+    
+    cout << o << endl;
 }
