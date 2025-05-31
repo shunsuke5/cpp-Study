@@ -8,79 +8,70 @@
 #include <chrono>
 #include <typeinfo>
 #include <climits>
-#define ARRAY_SIZE(array) (sizeof *ARRAY_SIZE_(&(array)))
+#include <cassert>
+#define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 using namespace std;
 
-template <typename TYPE>
-class Limits
-{
-public:
-    static const TYPE MIN;
-    static const TYPE MAX;
-};
+int Add(int a, int b) { return a + b; }
+int Sub(int a, int b) { return a - b; }
+int Mul(int a, int b) { return a * b; }
+int Div(int a, int b) { return a / b; }
 
 /*
-* クラス宣言で特殊化
+* 関数ポインタ
 */
-template<>
-class Limits<unsigned short>
-{
-public:
-    static const unsigned short MIN = 0;
-    static const unsigned short MAX = USHRT_MAX;
-};
+int (* const ADD) (int a, int b) = { Add };
 
 /*
-* 実態定義で特殊化
+* 関数ポインタの配列
 */
-template<> const int Limits<int>::MIN = INT_MIN;
-template<> const int Limits<int>::MAX = INT_MAX;
+int (* const FP_OPERATOR[]) (int a, int b) = {
+    Add, Sub, Mul, Div
+};
 
-template <typename TYPE>
-void ShowMinMax()
-{
-    cout << "Type: " << typeid(TYPE).name() << endl
-        << " Min: " << Limits<TYPE>::MIN << endl
-        << " Max: " << Limits<TYPE>::MAX << endl;
+const char* const OPERATION_NAME[] = {
+    "加算", "減算", "乗算", "除算" 
+};
+
+class Calculator {
+public:
+    void Run();
+
+private:
+    bool Input();
+    void Calculate();
+
+private:
+    int m_a, m_b;
+};
+
+void Calculator::Run() {
+    while (Input()) {
+        Calculate();
+    }
 }
 
-/*
-* 部分特殊化
-*/
-template <typename TYPE>
-class Value
-{
-public:
-    Value(const TYPE& value) : m_value(value) {}
-    void Show() { cout << m_value << endl; }
+bool Calculator::Input() {
+    cout << "2つの値を入力してください > " << flush;
+    m_b = 0;
+    cin >> m_a >> m_b;
+    return m_b != 0;
+}
 
-private:
-    TYPE m_value;
-};
+void Calculator::Calculate() {
+    static const size_t SIZE = ARRAY_SIZE(FP_OPERATOR);
+    assert(SIZE == ARRAY_SIZE(OPERATION_NAME));
 
-template <typename FIRST, typename SECOND>
-class Value<pair<FIRST, SECOND> >
-{
-public:
-    Value(const FIRST& first, const SECOND& second) :
-        m_value(first, second) {}
-
-    void Show() {
-        cout << "1st: " << m_value.first << endl
-            << "2nd: " << m_value.second << endl;
+    for (size_t i = 0; i < SIZE; ++i) {
+        int result = FP_OPERATOR[i](m_a, m_b);
+        cout << OPERATION_NAME[i] << ": " << result << endl;
     }
-
-private:
-    pair<FIRST, SECOND> m_value;
-};
+}
 
 int main()
 {
-    ShowMinMax<unsigned short>();
-    ShowMinMax<int>();
+    cout << ADD(1, 2) << endl;
 
-    Value<int> n(42);
-    n.Show();
-    Value<pair<int, const char*> > p(1, "Hoge");
-    p.Show();
+    Calculator calc;
+    calc.Run();
 }
