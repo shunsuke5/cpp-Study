@@ -8,22 +8,37 @@
 #include <vector>
 #include <chrono>
 #include <typeinfo>
+#define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 using namespace std;
 
-#define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
+namespace Hoge {
+    using namespace std;
+
+    void Hello() {
+        cout << "やあ、こんちは。" << endl;
+    }
+}
+
+class Show {
+public:
+    static void Value(char ch) { cout << ch << endl; }
+    static void Value(const char* str) { cout << str << endl; }
+};
+
+class Show2 : public Show {
+public:
+    static void Value(char ch) {
+        int n = static_cast<unsigned char>(ch);
+        cout << n << endl;
+    }
+
+    using Show::Value;
+};
 
 int main() {
-    static const int VALUE[] = {
-        1,2,4,8,
-    };
-    static const int SIZE = ARRAY_SIZE(VALUE);
+    Hoge::cout << "やあ、こんちは。" << Hoge::endl;
+    Hoge::Hello();
 
-    ValueFactory factory;
-
-    for (int i = 0; i < SIZE; ++i) {
-        Value* value = factory.New(VALUE[i]);
-        cout << value->Get() << ' ';
-        delete value;
-    }
-    cout << endl;
+    Show2::Value('A');
+    Show2::Value("Hoge");
 }
