@@ -12,69 +12,44 @@
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 using namespace std;
 
-class Calculator
+struct Point
 {
-public:
-    void Run();
-
-private:
-    bool Input();
-    void Calculate();
-
-private:
-    int Add() { return m_a + m_b; }
-    int Sub() { return m_a - m_b; }
-    int Mul() { return m_a * m_b; }
-    int Div() { return m_a / m_b; }
-
-    typedef int (Calculator::*FpOp2) ();
-    static const FpOp2 FP_OPERATOR[];
-
-    static const char* const OPERATION_NAME[];
-
-private:
-    int m_a, m_b;
+    int x, y;
 };
 
-const Calculator::FpOp2 Calculator::FP_OPERATOR[] =
+inline void IncPointMem(Point* pt, int size, int Point::* mp)
 {
-    &Calculator::Add, &Calculator::Sub,
-    &Calculator::Mul, &Calculator::Div
-};
-
-const char* const Calculator::OPERATION_NAME[] =
-{
-    "加算", "減算", "乗算", "除算"
-};
-
-void Calculator::Run()
-{
-    while (Input()) {
-        Calculate();
+    for (int i = 0; i < size; ++i) {
+        ++(pt[i].*mp);
     }
 }
 
-bool Calculator::Input()
+void IncX(Point* pt, int size)
 {
-    cout << "2つの値を入力してください > " << flush;
-    m_b = 0;
-    cin >> m_a >> m_b;
-    return m_b != 0;
+    IncPointMem(pt, size, &Point::x);
 }
 
-void Calculator::Calculate()
+void IncY(Point* pt, int size)
 {
-    static const size_t SIZE = ARRAY_SIZE(FP_OPERATOR);
-    assert(SIZE == ARRAY_SIZE(OPERATION_NAME));
+    IncPointMem(pt, size, &Point::y);
+}
 
-    for (size_t i = 0; i < SIZE; ++i) {
-        int result = (this->*FP_OPERATOR[i])();
-        cout << OPERATION_NAME[i] << ": " << result << endl;
+void Show(const Point* pt, int size)
+{
+    for (int i = 0; i < size; ++i) {
+        cout << pt[i].x << ", " << pt[i].y << endl;
     }
 }
 
 int main()
 {
-    Calculator calc;
-    calc.Run();
+    Point pt[] = {
+        {0,0}, {1,1}, {2,2}, {3,3}
+    };
+    int size = ARRAY_SIZE(pt);
+
+    IncX(pt, size);
+    IncY(pt, size);
+    IncY(pt, size);
+    Show(pt, size);
 }
