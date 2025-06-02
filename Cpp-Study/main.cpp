@@ -12,36 +12,45 @@
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 using namespace std;
 
-bool Input(double& value)
+void Dump(const void* vp, size_t size)
 {
-    cout << "数値を入力してください > " << flush;
-    value = 0;
-    cin >> value;
-    return value != 0;
-}
+    static const int WIDTH = 16;
+    const char* p = static_cast<const char*>(vp);
 
-void Show(string* str)
-{
-    /*
-    * ショートサーキットのおかげで、strがNULLの場合に
-    * str->empty()を実行することがなくなり、安全である
-    */
-    if (!(str == NULL || str->empty())) {
-        cout << *str << endl;
+    for (size_t i = 0; i < size; ++i) {
+        if (i % WIDTH == 0 && i != 0) {
+            cout << endl;
+        }
+        printf("%02X ", p[i]);
     }
+    cout << endl;
 }
 
 int main()
 {
-    double a, b;
-    while (Input(a) && Input(b)) {
-        cout << "a / b = " << (a / b) << endl
-            << "b / a = " << (b / a) << endl;
-    }
+    /*
+    * voidへのポインタを元の型でキャストして
+    * 参照先へとアクセスする
+    */
+    char c = '1';
+    int i = 2;
+    double d = 3;
+    void* p;
 
-    Show(NULL);
-    string str;
-    Show(&str);
-    str = "Hoge";
-    Show(&str);
+    p = &c;
+    cout << *static_cast<char*>(p) << ' ';
+    p = &i;
+    cout << *static_cast<int*>(p) << ' ';
+    p = &d;
+    cout << *static_cast<double*>(p) << endl;
+
+    /*
+    * 引数にvoidへのポインタを利用して
+    * 様々なデータを受け取れるようにする
+    */
+    int n = 0x12345678;
+    const char str[] = "Hello!";
+
+    Dump(&n, sizeof n);
+    Dump(str, sizeof str);
 }
