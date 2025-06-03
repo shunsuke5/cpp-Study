@@ -15,9 +15,45 @@
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 using namespace std;
 
-int main()
+/*
+* 4バイト境界にアラインするため、
+* name[21]の後ろに3バイト、sexの後ろに2バイトのパディングが入る
+*/
+struct Person
 {
-    int n;
-    cin >> n;
-    return cin.fail() ? EXIT_FAILURE : EXIT_SUCCESS;
+    char name[21];
+    int age;
+    char birthmonth;
+    char sex;
+};
+
+/*
+* #pragma pack(最大値) とすることで、
+* 揃えるバイト境界のサイズの最大値を設定する
+*/
+#pragma pack(1)
+struct Other
+{
+    char name[21];
+    int age;
+    char birthmonth;
+    char sex;
+};
+#pragma pack()
+
+int main(int argc, char* argv[])
+{
+    cout << "name : " << offsetof(Person, name) << endl             // 0
+        << "age : " << offsetof(Person, age) << endl                // 24
+        << "birthmonth : " << offsetof(Person, birthmonth) << endl  // 28
+        << "sex : " << offsetof(Person, sex) << endl                // 29
+        << "size : " << sizeof(Person) << endl;                     // 32
+
+    cout << endl;
+        
+    cout << "name : " << offsetof(Other, name) << endl              // 0
+        << "age : " << offsetof(Other, age) << endl                 // 21
+        << "birthmonth : " << offsetof(Other, birthmonth) << endl   // 25
+        << "sex : " << offsetof(Other, sex) << endl                 // 26
+        << "size : " << sizeof(Other) << endl;                      // 27
 }
