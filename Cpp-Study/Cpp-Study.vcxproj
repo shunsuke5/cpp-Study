@@ -140,8 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="TaskManager.cpp" />
-    <ClCompile Include="TaskManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SList.hpp" />
