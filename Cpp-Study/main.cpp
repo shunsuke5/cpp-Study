@@ -1,47 +1,34 @@
-#include "TaskManager.hpp"
+#include "SList.hpp"
 #include <iostream>
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 using namespace std;
 
-class CountDown
+typedef SList<int> List;
+typedef List::Node Node;
+
+void Show(const List& list)
 {
-public:
-    static bool Task()
-    {
-        cout << m_count << endl;
-        if (m_count == 0) {
-            return false;
-        }
-        --m_count;
-        return true;
+    for (const Node* node = list.GetFirst(); node != NULL; node = node->next) {
+        cout << node->value << ' ';
     }
-
-    static void Register(TaskManager& manager, int count)
-    {
-        m_count = count;
-        manager.Register(Task);
-    }
-
-private:
-    static int m_count;
-};
-
-int CountDown::m_count;
-
-bool Hello()
-{
-    cout << "Hello" << endl;
-    return true;
+    cout << endl;
 }
 
 int main()
 {
-    TaskManager manager;
+    List list;
 
-    CountDown::Register(manager, 3);
-    manager.Register(Hello);
-
-    for (int i = 0; i < 5; ++i) {
-        manager.Execute();
+    for (int i = 0; i < 10; ++i) {
+        list.Unshift(i);
     }
+    Show(list);     // 9 8 7 6 5 4 3 2 1 0
+
+    list.Shift();
+    Show(list);     // 8 7 6 5 4 3 2 1 0
+
+    list.At(3) = 42;
+    Show(list);     // 8 7 6 42 4 3 2 1 0
+
+    list.Clear();
+    Show(list);     // (表示なし)
 }
