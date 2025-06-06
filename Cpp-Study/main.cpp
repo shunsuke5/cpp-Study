@@ -10,16 +10,31 @@ typedef Node* Node::* ShowDirection;
 const ShowDirection SD_FORWARD = &Node::next;
 const ShowDirection SD_BACKWARD = &Node::prev;
 
-/*
-* ShowDirectionを使用することで正順の走査か逆順の走査かを
-* 引数の dir で指定できるようにして、1つの関数にまとめている
-*/
-void Show(const List& list, ShowDirection dir = SD_FORWARD)
+class Iterator
 {
-    const Node* eol = list.Eol();
-    const Node* head = eol->*dir;
-    for (const Node* node = head; node != eol; node = node->*dir) {
-        cout << node->value << ' ';
+public:
+    Iterator(const Node* node) : m_node(node) {}
+
+public:
+    int operator*() { return m_node->value; }
+
+    bool operator!=(const Iterator& other) const { return m_node != other.m_node; }
+
+    void operator++() { m_node = m_node->next; }
+
+protected:
+    const Node* m_node;
+};
+
+/*
+* テンプレートにすることで、
+* iteratorクラスも配列も渡せるようになる
+*/
+template <typename ITERATOR>
+void Show(ITERATOR begin, ITERATOR end)
+{
+    for (ITERATOR it = begin; it != end; ++it) {
+        cout << *it << ' ';
     }
     cout << endl;
 }
@@ -31,16 +46,9 @@ int main()
     for (int i = 0; i < 5; ++i) {
         list.Push(i);
     }
-    Show(list);
-    Show(list, SD_BACKWARD);
+    Show(Iterator(list.GetFirst()), Iterator(list.Eol()));
 
-    for (int i = 5; i < 10; ++i) {
-        list.Unshift(i);
-    }
-    Show(list);
-
-    list.Pop();
-    list.Pop();
-    list.Shift();
-    Show(list);
+    static const int ARRAY[] = { 1,2,4,8 };
+    static const int SIZE = ARRAY_SIZE(ARRAY);
+    Show(ARRAY, ARRAY + SIZE);
 }
