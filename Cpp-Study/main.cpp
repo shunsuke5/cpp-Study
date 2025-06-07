@@ -1,54 +1,54 @@
-#include "DList.hpp"
+#include "Stack.hpp"
+#include "Queue.hpp"
 #include <iostream>
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 using namespace std;
 
-typedef DList<int> List;
-typedef List::Node Node;
-
-typedef Node* Node::* ShowDirection;
-const ShowDirection SD_FORWARD = &Node::next;
-const ShowDirection SD_BACKWARD = &Node::prev;
-
-class Iterator
-{
-public:
-    Iterator(const Node* node) : m_node(node) {}
-
-public:
-    int operator*() { return m_node->value; }
-
-    bool operator!=(const Iterator& other) const { return m_node != other.m_node; }
-
-    void operator++() { m_node = m_node->next; }
-
-protected:
-    const Node* m_node;
-};
-
-/*
-* テンプレートにすることで、
-* iteratorクラスも配列も渡せるようになる
-*/
-template <typename ITERATOR>
-void Show(ITERATOR begin, ITERATOR end)
-{
-    for (ITERATOR it = begin; it != end; ++it) {
-        cout << *it << ' ';
-    }
-    cout << endl;
-}
-
 int main()
 {
-    List list;
+    /*
+    * スタック
+    */
+    Stack<int> stack(10);
 
-    for (int i = 0; i < 5; ++i) {
-        list.Push(i);
+    try {
+        for (int i = 0; i < 20; ++i) {
+            stack.Push(i);
+        }
+    } catch (const overflow_error& e) {
+        cerr << e.what() << endl;
     }
-    Show(Iterator(list.GetFirst()), Iterator(list.Eol()));
 
-    static const int ARRAY[] = { 1,2,4,8 };
-    static const int SIZE = ARRAY_SIZE(ARRAY);
-    Show(ARRAY, ARRAY + SIZE);
+    while (!stack.Empty()) {
+        cout << stack.Top() << ' ';
+        stack.Pop();
+    }
+    cout << endl;
+
+    try {
+        stack.Pop();
+    } catch (const underflow_error& e) {
+        cerr << e.what() << endl;
+    }
+
+    cout << endl;
+
+    /*
+    * キュー
+    */
+    Queue<int> queue(10);
+
+    try {
+        for (int i = 0; i < 5; ++i) { queue.Push(i); }
+        for (int i = 0; i < 3; ++i) { queue.Pop(); }
+        for (int i = 0; i < 20; ++i) { queue.Push(i); }
+    } catch (const overflow_error& e) {
+        cerr << e.what() << endl;
+    }
+
+    while (!queue.Empty()) {
+        cout << queue.Front() << ' ';
+        queue.Pop();
+    }
+    cout << endl;
 }
