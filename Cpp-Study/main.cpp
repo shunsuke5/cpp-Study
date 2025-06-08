@@ -4,51 +4,34 @@
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 using namespace std;
 
+class Hoge
+{
+public:
+    explicit Hoge(int n) : m_n(n) {}
+    int Get() const { return m_n; }
+private:
+    int m_n;
+};
+
 int main()
 {
     /*
-    * スタック
+    * コピーコンストラクタは明示的に作成しなかった場合、
+    * 暗黙に作られるので以下の一文も問題なく動作する
     */
-    Stack<int> stack(10);
+    Stack<Hoge> stack(10);
 
     try {
         for (int i = 0; i < 20; ++i) {
-            stack.Push(i);
+            stack.Push(Hoge(i));
         }
     } catch (const overflow_error& e) {
         cerr << e.what() << endl;
     }
 
     while (!stack.Empty()) {
-        cout << stack.Top() << ' ';
+        cout << stack.Top().Get() << ' ' << flush;
         stack.Pop();
-    }
-    cout << endl;
-
-    try {
-        stack.Pop();
-    } catch (const underflow_error& e) {
-        cerr << e.what() << endl;
-    }
-
-    cout << endl;
-
-    /*
-    * キュー
-    */
-    Queue<int> queue(10);
-
-    try {
-        for (int i = 0; i < 5; ++i) { queue.Push(i); }
-        for (int i = 0; i < 3; ++i) { queue.Pop(); }
-        for (int i = 0; i < 20; ++i) { queue.Push(i); }
-    } catch (const overflow_error& e) {
-        cerr << e.what() << endl;
-    }
-
-    while (!queue.Empty()) {
-        cout << queue.Front() << ' ';
-        queue.Pop();
     }
     cout << endl;
 }

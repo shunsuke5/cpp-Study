@@ -7,18 +7,31 @@ template <typename TYPE>
 class Stack
 {
 public:
+    /*
+    * メモリ領域をchar配列として確保しているだけなので、
+    * TYPEのコンストラクタは呼ばれない
+    */
     explicit Stack(size_t sizeMax) : m_sizeMax(sizeMax), m_size(0)
     {
-        m_array = new TYPE[sizeMax];
+        m_array = new char[m_sizeMax * sizeof(TYPE)];
     }
 
-    virtual ~Stack() { delete[] m_array; }
+    /*
+    * 「char配列として」m_arrayを確保しているため、
+    * Clear()を行わないと「char配列として」メモリが解放され、
+    * TYPEのデストラクタが呼ばれないことに注意する
+    */
+    virtual ~Stack()
+    {
+        Clear();
+        delete[] m_array;
+    }
 
 public:
     void Push(const TYPE& value)
     {
         CheckOverflow();
-        m_array[m_size] = value;
+        new(&GetAt(m_size)) TYPE(value);    // TYPEのコピーコンストラクタ呼び出し
         ++m_size;
     }
 
@@ -26,13 +39,14 @@ public:
     {
         CheckUnderflow();
         --m_size;
+        GetAt(m_size).~TYPE();              // TYPEのデストラクタ呼び出し
     }
 
 private:
     const TYPE& Top_() const
     {
         CheckUnderflow();
-        return m_array[m_size - 1];
+        return GetAt(m_size - 1);
     }
 
 public:
@@ -40,6 +54,13 @@ public:
     const TYPE& Top() const { return Top_(); }
     bool Full() const { return m_size == m_sizeMax; }
     bool Empty() const { return m_size == 0; }
+
+    void Clear()
+    {
+        while (m_size > 0) {
+            Pop();
+        }
+    }
 
 private:
     void CheckOverflow() const
@@ -57,7 +78,14 @@ private:
     }
 
 private:
-    TYPE* m_array;
+    // 配列内の指定された要素への参照を、charからTYPEへ変換して返す
+    const TYPE& GetAt_(size_t i) const { return reinterpret_cast<const TYPE&>(m_array[i * sizeof(TYPE)]); }
+
+    TYPE& GetAt(size_t i) { return const_cast<TYPE&>(GetAt_(i)); }
+    const TYPE& GetAt(size_t i) const { return GetAt_(i); }
+
+private:
+    char* m_array;
     size_t m_sizeMax;
     size_t m_size;
 };
