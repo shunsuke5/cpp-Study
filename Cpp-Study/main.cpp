@@ -1,37 +1,74 @@
-#include "Tree.hpp"
+#include "Assoc.hpp"
 #include <iostream>
 #include <iomanip>
 #include <string>
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 using namespace std;
 
-typedef Tree<string> NameTree;
-typedef NameTree::Node Node;
-typedef NameTree::Children Children;
-typedef NameTree::CIterator CIterator;
+typedef Assoc<int, string> AssocIS;
 
-void Show(const Node* node, int depth = 0)
+bool Input(int& n)
 {
-    cout << setw(depth * 2) << "" << node->value << endl;
+    cout << "値を入力してください > " << flush;
+    n = 0;
+    cin >> n;
+    return n > 0;
+}
 
-    const Children& children = node->children;
-    for (CIterator it = children.begin(); it != children.end(); ++it) {
-        Show(*it, depth + 1);
+void Check(const AssocIS& assoc, int n)
+{
+    try {
+        cout << assoc[n] << endl;
+    } catch (const out_of_range& e) {
+        cerr << e.what() << endl;
+    }
+}
+
+typedef Assoc<string, string> Setting;
+
+bool Input(string& key)
+{
+    cout << "文字列を入力してください > " << flush;
+    key = "";
+    getline(cin, key);
+    return !key.empty();
+}
+
+void Check(const Setting& setting, const string& key)
+{
+    try {
+        cout << setting[key] << endl;
+    } catch (const out_of_range& e) {
+        cerr << e.what() << endl;
     }
 }
 
 int main()
 {
-    NameTree tree("hoge");
-    Node* hoge = tree.GetRoot();
+    AssocIS assoc;
 
-    Node* foo = NameTree::Append(hoge, "foo");
-    Node* bar = NameTree::Append(hoge, "bar");
-    NameTree::Append(hoge, "readme.txt");
-    NameTree::Append(foo, "foo.h");
-    NameTree::Append(foo, "foo.cpp");
-    NameTree::Append(bar, "bar.h");
-    NameTree::Append(bar, "bar.cpp");
+    assoc[42] = "Hoge";
+    assoc[25] = "Foo";
+    assoc[89] = "Bar";
+    assoc[11] = "Baz";
 
-    Show(hoge);
+    int n;
+    while (Input(n)) {
+        Check(assoc, n);
+    }
+
+    for (int i = 0; i < 500; ++i) {
+        std::cin.clear();
+    }
+
+    Setting setting;
+
+    setting["Type"] = "Rectangle";
+    setting["Size"] = "1024x768";
+    setting["Color"] = "Green";
+
+    string key;
+    while (Input(key)) {
+        Check(setting, key);
+    }
 }
