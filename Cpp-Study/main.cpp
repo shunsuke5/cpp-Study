@@ -1,42 +1,37 @@
+#include "Tree.hpp"
 #include <iostream>
+#include <iomanip>
 #include <string>
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 using namespace std;
 
-bool Match(const char* str, const char* pat)
-{
-    for (; !(*str == '\0' || *pat == '\0'); ++str, ++pat) {
-        if (*pat == '*') {
-            for (++pat; ; ++str) {
-                if (Match(str, pat)) {
-                    return true;
-                }
+typedef Tree<string> NameTree;
+typedef NameTree::Node Node;
+typedef NameTree::Children Children;
+typedef NameTree::CIterator CIterator;
 
-                if (*str == '\0') {
-                    return false;
-                }
-            }
-        } else {
-            if (*pat != *str) {
-                return false;
-            }
-        }
+void Show(const Node* node, int depth = 0)
+{
+    cout << setw(depth * 2) << "" << node->value << endl;
+
+    const Children& children = node->children;
+    for (CIterator it = children.begin(); it != children.end(); ++it) {
+        Show(*it, depth + 1);
     }
-
-    return *pat == *str;
-}
-
-bool Input(string& str)
-{
-    cout << "> " << flush;
-    getline(cin, str);
-    return !(cin.fail() || str == "");
 }
 
 int main()
 {
-    string str, pat;
-    while (Input(str) && Input(pat)) {
-        cout << (Match(str.c_str(), pat.c_str()) ? "マッチ" : "NOマッチ") << endl;
-    }
+    NameTree tree("hoge");
+    Node* hoge = tree.GetRoot();
+
+    Node* foo = NameTree::Append(hoge, "foo");
+    Node* bar = NameTree::Append(hoge, "bar");
+    NameTree::Append(hoge, "readme.txt");
+    NameTree::Append(foo, "foo.h");
+    NameTree::Append(foo, "foo.cpp");
+    NameTree::Append(bar, "bar.h");
+    NameTree::Append(bar, "bar.cpp");
+
+    Show(hoge);
 }
