@@ -1,4 +1,5 @@
 #include "Assoc.hpp"
+#include "Hash.hpp"
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -24,7 +25,7 @@ void Check(const AssocIS& assoc, int n)
     }
 }
 
-typedef Assoc<string, string> Setting;
+typedef Hash<string, string> Setting;
 
 bool Input(string& key)
 {
