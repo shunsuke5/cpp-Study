@@ -13,19 +13,21 @@ public:
     Number(double n) { operator=(n); }
     void operator=(int n);
     void operator=(double n);
-    void PrintSize();
 
 public:
     friend std::ostream& operator<<(std::ostream& ostr, const Number& n);
 
 private:
-    union Value
+    /*
+    * 共用体タグ、共用体変数どちらも宣言していないため、
+    * Numberクラスのメンバ変数であるかのように直接アクセスできる
+    * メモリ領域も共有される
+    */
+    union
     {
-        int int_;
-        double double_;
+        int m_int;
+        double m_double;
     };
-
-    Value m_value;
     Type m_type;
 };
 
