@@ -5,29 +5,33 @@
 #define ARRAY_SIZE(array) (sizeof (array) / sizeof *(array))
 using namespace std;
 
-union Int
+/*
+* 2バイトの変数 word を、1バイト単位でも扱えるような構造体
+* この時、特に構造体に型名が無くても困らない
+*/
+union Word
 {
-    int value;
-    unsigned char bytes[sizeof(int)];
+    unsigned short word;
+
+    struct
+    {
+        unsigned char low;
+        unsigned char high;
+    } byte;
 };
 
-void Show(const unsigned char* array, int size)
+/*
+* 無名列挙体、定数を宣言する場合に便利
+*/
+enum
 {
-    for (int i = 0; i < size; ++i) {
-        printf("%02X ", array[i]);
-    }
-    puts("");
-}
+    ONE = 1, TWO, THREE
+};
 
 int main()
 {
-    Number i = 1;
-    Number d = 1.0;
-    cout << i << endl;
-    cout << d << endl;
-    i.PrintSize();  // Valueの宣言がunionなら 8, structなら 16
-
-    Int n;
-    n.value = 255;
-    Show(n.bytes, ARRAY_SIZE(n.bytes));
+    Word n = { 0x1234 };
+    int n1 = 4660;
+    printf("上位バイト： %02X\n", n.byte.high);
+    printf("下位バイト： %02X\n", n.byte.low);
 }
